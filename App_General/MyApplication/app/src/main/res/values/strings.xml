@@ -1,0 +1,13 @@
+<resources>
+    <string name="app_name">Weed Detection</string>
+    <string name="main_title">Weed Detection</string>
+    <string name="file_page">File Manager</string>
+    <string name="export">Export File</string>
+    <string name="delete_b">Delete File</string>
+    <string name="to_file">Files</string>
+    <string name="select_camera">Select Camera</string>
+    <string name="record">Record</string>
+    <string name="intel">Intel</string>
+    <string name="gopro">GoPro</string>
+    <string name="directories">Directories</string>
+</resources>

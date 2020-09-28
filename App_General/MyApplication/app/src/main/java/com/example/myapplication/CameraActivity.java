@@ -17,6 +17,8 @@ import android.os.Looper;
 import android.view.View;
 import android.view.Window;
 import android.widget.Button;
+import android.widget.EditText;
+import android.widget.Switch;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -43,5 +45,18 @@ public class CameraActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         this.requestWindowFeature(Window.FEATURE_NO_TITLE);
         setContentView(R.layout.select_camera);
+
+        // Set up intel camera
+        Button intelSetup = (Button) findViewById(R.id.intel_setup);
+        intelSetup.setClickable(false);
+        final EditText intelRes = (EditText) findViewById(R.id.intel_resolution);
+        EditText intelFPS = (EditText) findViewById(R.id.intel_FPS);
+
+        intelSetup.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                Toast.makeText(CameraActivity.this, "Camera Not Detected!", Toast.LENGTH_SHORT).show();
+            }
+        });
     }
 }

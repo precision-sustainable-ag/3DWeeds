@@ -5,9 +5,10 @@
     <string name="export">Export File</string>
     <string name="delete_b">Delete File</string>
     <string name="to_file">Files</string>
-    <string name="select_camera">Select Camera</string>
+    <string name="configure_camera">Configure Camera</string>
     <string name="record">Record</string>
     <string name="intel">Intel</string>
     <string name="gopro">GoPro</string>
     <string name="directories">Directories</string>
+    <string name="camera_connected">Camera: Not Connected</string>
 </resources>

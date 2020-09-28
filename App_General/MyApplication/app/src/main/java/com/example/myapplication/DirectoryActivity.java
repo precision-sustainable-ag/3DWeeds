@@ -48,8 +48,9 @@ import java.util.Locale;
 public class DirectoryActivity extends AppCompatActivity {
     ListView directoryList;
     List<String> directoryNames = new ArrayList<String>();
-    final String rootPath = String.valueOf(Environment.
+    final String rootPathDownload = String.valueOf(Environment.
             getExternalStoragePublicDirectory(Environment.DIRECTORY_DOWNLOADS));
+    final String rootPath = rootPathDownload + "/WeedDetection";
     CustomAdapter customAdapter;
     File[] files;
     private static final String SHARED_PREFS = "storingFileData";
@@ -66,6 +67,12 @@ public class DirectoryActivity extends AppCompatActivity {
         final Calendar calendar = Calendar.getInstance();
         final SimpleDateFormat sdf = new SimpleDateFormat("HH:mm:ss", Locale.getDefault());
 
+        // Make sure rooth path exists, if not create it
+        final File rootFolder = new File(rootPath);
+        if (!rootFolder.exists()) {
+            // add folder
+            rootFolder.mkdir();
+        }
         // set up list views
         directoryList = (ListView) findViewById(R.id.directoryListView);
         customAdapter = new CustomAdapter(getApplicationContext(), directoryNames);
@@ -226,11 +233,11 @@ public class DirectoryActivity extends AppCompatActivity {
         fileOrDirectory.delete();
     }
 
-    private void saveFileData(String filename, String date) {
+    private void saveFileData(String filename, String data) {
         SharedPreferences sharedPreferences = getSharedPreferences(SHARED_PREFS, MODE_PRIVATE);
         SharedPreferences.Editor editor = sharedPreferences.edit();
         // save date with filename as the key
-        editor.putString(filename, date);
+        editor.putString(filename, data);
         editor.apply();
     }
 
@@ -239,6 +246,7 @@ public class DirectoryActivity extends AppCompatActivity {
         return sharedPreferences.getString(filename, "Not Found");
     }
 
+    @SuppressLint("MissingPermission")
     private void getCurrentLocation() {
         final LocationRequest locationRequest = new LocationRequest();
         locationRequest.setInterval(10000);

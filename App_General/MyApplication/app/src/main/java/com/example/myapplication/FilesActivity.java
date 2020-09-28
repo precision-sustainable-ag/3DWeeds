@@ -98,6 +98,33 @@ public class FilesActivity extends AppCompatActivity {
             }
         });
 
+        // long clicking on directory
+        filesList.setOnItemLongClickListener(new AdapterView.OnItemLongClickListener() {
+            @Override
+            public boolean onItemLongClick(AdapterView<?> parent, View view, final int position, long id) {
+                final AlertDialog.Builder deleteDialog = new AlertDialog.Builder(FilesActivity.this);
+                deleteDialog.setMessage("Select All?");
+                deleteDialog.setPositiveButton("Yes", new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialog, int which) {
+                        for (int i = 0; i < customAdapter.getCount(); i++) {
+                            selected[i] = true;
+                        }
+                        bottom_buttons.setVisibility(View.VISIBLE);
+                        customAdapter.notifyDataSetChanged();
+                    }
+                });
+                deleteDialog.setNegativeButton("Cancel", new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialog, int which) {
+                        dialog.cancel();
+                    }
+                });
+                deleteDialog.show();
+                return true;
+            }
+        });
+
         Button delete_button = findViewById(R.id.delete_file);
         Button preprocess_button = findViewById(R.id.preprocess_file);
         Button export_button = findViewById(R.id.export_file);
@@ -143,6 +170,7 @@ public class FilesActivity extends AppCompatActivity {
                 preDialog.setPositiveButton("Yes", new DialogInterface.OnClickListener() {
                     @Override
                     public void onClick(DialogInterface dialog, int which) {
+                        // preprocess code
                         updateFilesList();
                         customAdapter.notifyDataSetChanged();
                         bottom_buttons.setVisibility(View.GONE);
@@ -168,6 +196,7 @@ public class FilesActivity extends AppCompatActivity {
                 exportDialog.setPositiveButton("Yes", new DialogInterface.OnClickListener() {
                     @Override
                     public void onClick(DialogInterface dialog, int which) {
+                        // code to export to azure
                         updateFilesList();
                         customAdapter.notifyDataSetChanged();
                         Toast.makeText(FilesActivity.this, "File(s) exported", Toast.LENGTH_SHORT).show();

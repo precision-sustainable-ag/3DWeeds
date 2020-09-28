@@ -6,6 +6,7 @@ import androidx.core.app.ActivityCompat;
 import androidx.core.content.ContextCompat;
 
 import android.Manifest;
+import android.annotation.SuppressLint;
 import android.app.ActivityManager;
 import android.content.Context;
 import android.content.Intent;
@@ -33,6 +34,9 @@ import java.util.Date;
 import java.util.Locale;
 import java.util.Objects;
 
+import com.intel.realsense.librealsense.DeviceListener;
+import com.intel.realsense.librealsense.RsContext;
+
 public class MainActivity extends AppCompatActivity {
 
     private static final int REQUEST_CODE_LOCATION_PERMISSION = 1;
@@ -40,10 +44,18 @@ public class MainActivity extends AppCompatActivity {
     private static final String[] PERMISSIONS = {
             Manifest.permission.READ_EXTERNAL_STORAGE,
             Manifest.permission.WRITE_EXTERNAL_STORAGE,
-            Manifest.permission.ACCESS_FINE_LOCATION
+            Manifest.permission.ACCESS_FINE_LOCATION,
+            Manifest.permission.CAMERA
     };
     private static final int PERMISSIONS_COUNT = PERMISSIONS.length;
     TextView textViewLocation;
+
+    private RsContext mRsContext;
+
+    // Used to load the 'native-lib' library on application startup.
+    static {
+        System.loadLibrary("native-lib");
+    }
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -58,7 +70,7 @@ public class MainActivity extends AppCompatActivity {
         String currentDateandTime = currentDate + "\nTime: " + currentTime;
         // display date and time
         TextView textViewDate = findViewById(R.id.date);
-        //textViewDate.setText(currentDateandTime);
+        textViewDate.setText(currentDateandTime);
 
         // getting location
         // checking permissions for location and storage first
@@ -71,6 +83,10 @@ public class MainActivity extends AppCompatActivity {
                     REQUEST_PERMISSIONS
             );
         }
+        else {
+            getCurrentLocation();
+        }
+
 
 
         // for navigating to FileAcvitvity
@@ -89,8 +105,29 @@ public class MainActivity extends AppCompatActivity {
                 startActivity(new Intent(MainActivity.this, DirectoryActivity.class));
             }
         });
+
+        //RsContext.init must be called once in the application's lifetime before any interaction with physical RealSense devices.
+        //For multi activities applications use the application context instead of the activity context
+        RsContext.init(getApplicationContext());
+
+        printMessage();
+
+        //Register to notifications regarding RealSense devices attach/detach events via the DeviceListener.
+        mRsContext = new RsContext();
+        mRsContext.setDevicesChangedCallback(new DeviceListener() {
+            @Override
+            public void onDeviceAttach() {
+                printMessage();
+            }
+
+            @Override
+            public void onDeviceDetach() {
+                printMessage();
+            }
+        });
     }
 
+    // Checks if all permissions have been granted
     private boolean arePermissionsGranted(){
         int p = 0;
         while (p<PERMISSIONS_COUNT) {
@@ -102,6 +139,7 @@ public class MainActivity extends AppCompatActivity {
         return true;
     }
 
+    // Closes application if permissions have not been granted
     @Override
     public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions, @NonNull int[] grantResults) {
         super.onRequestPermissionsResult(requestCode, permissions, grantResults);
@@ -116,7 +154,8 @@ public class MainActivity extends AppCompatActivity {
         }
     }
 
-
+    // Gets current location
+    @SuppressLint("MissingPermission")
     private void getCurrentLocation() {
         final LocationRequest locationRequest = new LocationRequest();
         locationRequest.setInterval(10000);
@@ -139,11 +178,29 @@ public class MainActivity extends AppCompatActivity {
                         String currentLocation = String.format("Latitude: %s\nLongitude: %s",
                             latitude,
                             longitude);
-                        // textViewLocation.setText(currentLocation);
+                        textViewLocation.setText(currentLocation);
                     }
                 }
 
         }, Looper.getMainLooper());
+    }
+
+    private void printMessage(){
+        // Example of a call to native methods
+        int cameraCount = nGetCamerasCountFromJNI();
+        final String version = nGetLibrealsenseVersionFromJNI();
+        final String cameraCountString;
+        if(cameraCount == 0)
+            cameraCountString = "No cameras are currently connected.";
+        else
+            cameraCountString = "Camera is connected";
+        runOnUiThread(new Runnable() {
+            @Override
+            public void run() {
+                TextView camera_connected = (TextView) findViewById(R.id.camera_connected);
+                camera_connected.setText("This app use librealsense: " + version + "\n" + cameraCountString);
+            }
+        });
     }
 
     // refresh the page when using the back button
@@ -155,4 +212,6 @@ public class MainActivity extends AppCompatActivity {
         startActivity(getIntent());
     }
 
+    private static native String nGetLibrealsenseVersionFromJNI();
+    private static native int nGetCamerasCountFromJNI();
 }

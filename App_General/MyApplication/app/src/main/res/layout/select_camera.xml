@@ -9,7 +9,7 @@
         android:fontFamily="cursive"
         android:textSize="25sp"
         android:gravity="center"
-        android:text="@string/select_camera"
+        android:text="@string/configure_camera"
         android:layout_width="match_parent"
         android:layout_height="50dp" />
     <LinearLayout
@@ -25,6 +25,7 @@
             android:layout_weight="1"
             android:orientation="vertical">
             <Button
+                android:enabled="false"
                 android:layout_width="match_parent"
                 android:layout_height="100dp"
                 android:text="@string/gopro"/>
@@ -45,7 +46,7 @@
                 android:layout_height="50dp"
                 android:ems="10"
                 android:inputType="number"
-                android:hint="Focus"/>
+                android:hint="FOV"/>
         </LinearLayout>
         <LinearLayout
             android:layout_width="0dp"
@@ -53,27 +54,33 @@
             android:layout_weight="1"
             android:orientation="vertical">
             <Button
+                android:id="@+id/intel_setup"
                 android:layout_width="match_parent"
                 android:layout_height="100dp"
-                android:text="@string/intel"/>
+                android:text="@string/intel"
+                android:enabled="false"/>
             <EditText
+                android:id="@+id/intel_resolution"
                 android:layout_width="match_parent"
                 android:layout_height="50dp"
                 android:ems="10"
                 android:inputType="number"
                 android:hint="Resolution" />
             <EditText
+                android:id="@+id/intel_FPS"
                 android:layout_width="match_parent"
                 android:layout_height="50dp"
                 android:ems="10"
                 android:inputType="number"
                 android:hint="FPS"/>
             <EditText
+                android:id="@+id/intel_FOV"
                 android:layout_width="match_parent"
                 android:layout_height="50dp"
                 android:ems="10"
                 android:inputType="number"
-                android:hint="Focus"/>
+                android:hint="FOV"/>
+
         </LinearLayout>
 
     </LinearLayout>

@@ -1,7 +1,7 @@
 [
 {
-  "directory": "/Users/willburket/AndroidStudioProjects/NativeExample/app/.cxx/cmake/debug/x86_64",
-  "command": "/Users/willburket/Library/Android/sdk/ndk/21.0.6113669/toolchains/llvm/prebuilt/darwin-x86_64/bin/clang++ --target=x86_64-none-linux-android21 --gcc-toolchain=/Users/willburket/Library/Android/sdk/ndk/21.0.6113669/toolchains/llvm/prebuilt/darwin-x86_64 --sysroot=/Users/willburket/Library/Android/sdk/ndk/21.0.6113669/toolchains/llvm/prebuilt/darwin-x86_64/sysroot  -Dnative_lib_EXPORTS -I../../../../src/main/cpp/include  -g -DANDROID -fdata-sections -ffunction-sections -funwind-tables -fstack-protector-strong -no-canonical-prefixes -D_FORTIFY_SOURCE=2 -Wformat -Werror=format-security  -fexceptions -O0 -fno-limit-debug-info  -fPIC   -o CMakeFiles/native-lib.dir/src/main/cpp/native-lib.cpp.o -c /Users/willburket/AndroidStudioProjects/NativeExample/app/src/main/cpp/native-lib.cpp",
-  "file": "/Users/willburket/AndroidStudioProjects/NativeExample/app/src/main/cpp/native-lib.cpp"
+  "directory": "C:/Users/Harrison Klas/Documents/PSA/3DWeeds/App_General/Camera/app/.cxx/cmake/debug/x86_64",
+  "command": "C:\\Users\\HARRIS~1\\AppData\\Local\\Android\\Sdk\\ndk\\210~1.611\\TOOLCH~1\\llvm\\prebuilt\\WINDOW~1\\bin\\CLANG_~1.EXE --target=x86_64-none-linux-android21 --gcc-toolchain=\"C:/Users/Harrison Klas/AppData/Local/Android/Sdk/ndk/21.0.6113669/toolchains/llvm/prebuilt/windows-x86_64\" --sysroot=\"C:/Users/Harrison Klas/AppData/Local/Android/Sdk/ndk/21.0.6113669/toolchains/llvm/prebuilt/windows-x86_64/sysroot\"  -Dnative_lib_EXPORTS -I../../../../src/main/cpp/include  -g -DANDROID -fdata-sections -ffunction-sections -funwind-tables -fstack-protector-strong -no-canonical-prefixes -D_FORTIFY_SOURCE=2 -Wformat -Werror=format-security  -fexceptions -O0 -fno-limit-debug-info  -fPIC   -o CMakeFiles\\native-lib.dir\\src\\main\\cpp\\native-lib.cpp.o -c \"C:\\Users\\Harrison Klas\\Documents\\PSA\\3DWeeds\\App_General\\Camera\\app\\src\\main\\cpp\\native-lib.cpp\"",
+  "file": "C:/Users/Harrison Klas/Documents/PSA/3DWeeds/App_General/Camera/app/src/main/cpp/native-lib.cpp"
 }
 ]

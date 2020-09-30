@@ -1,0 +1,8 @@
+Executable : C:\Users\Harrison
+arguments : 
+Klas\AppData\Local\Android\Sdk\cmake\3.10.2.4988404\bin\ninja.exe
+-C
+C:\Users\Harrison Klas\Documents\PSA\3DWeeds\App_General\Camera\app\.cxx\cmake\debug\x86_64
+native-lib
+jvmArgs : 
+

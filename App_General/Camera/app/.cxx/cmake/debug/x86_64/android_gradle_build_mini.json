@@ -1,22 +1,20 @@
 {
   "buildFiles": [
-    "/Users/willburket/Library/Android/sdk/ndk/21.0.6113669/build/cmake/android.toolchain.cmake",
-    "/Users/willburket/Library/Android/sdk/ndk/21.0.6113669/build/cmake/platforms.cmake",
-    "/Users/willburket/AndroidStudioProjects/NativeExample/app/CMakeLists.txt"
+    "C:\\Users\\Harrison Klas\\AppData\\Local\\Android\\Sdk\\ndk\\21.0.6113669\\build\\cmake\\platforms.cmake",
+    "C:\\Users\\Harrison Klas\\Documents\\PSA\\3DWeeds\\App_General\\Camera\\app\\CMakeLists.txt",
+    "C:\\Users\\Harrison Klas\\AppData\\Local\\Android\\Sdk\\ndk\\21.0.6113669\\build\\cmake\\android.toolchain.cmake"
   ],
   "cleanCommands": [
-    "/Users/willburket/Library/Android/sdk/cmake/3.10.2.4988404/bin/ninja -C \"/Users/willburket/AndroidStudioProjects/NativeExample/app/.cxx/cmake/debug/x86_64\" clean"
+    "C:\\Users\\Harrison Klas\\AppData\\Local\\Android\\Sdk\\cmake\\3.10.2.4988404\\bin\\ninja.exe -C \"C:\\Users\\Harrison Klas\\Documents\\PSA\\3DWeeds\\App_General\\Camera\\app\\.cxx\\cmake\\debug\\x86_64\" clean"
   ],
-  "buildTargetsCommand": "/Users/willburket/Library/Android/sdk/cmake/3.10.2.4988404/bin/ninja  -C \"/Users/willburket/AndroidStudioProjects/NativeExample/app/.cxx/cmake/debug/x86_64\" {LIST_OF_TARGETS_TO_BUILD}",
+  "buildTargetsCommand": "C:\\Users\\Harrison Klas\\AppData\\Local\\Android\\Sdk\\cmake\\3.10.2.4988404\\bin\\ninja.exe  -C \"C:\\Users\\Harrison Klas\\Documents\\PSA\\3DWeeds\\App_General\\Camera\\app\\.cxx\\cmake\\debug\\x86_64\" {LIST_OF_TARGETS_TO_BUILD}",
   "libraries": {
     "native-lib-Debug-x86_64": {
       "artifactName": "native-lib",
-      "buildCommand": "/Users/willburket/Library/Android/sdk/cmake/3.10.2.4988404/bin/ninja -C \"/Users/willburket/AndroidStudioProjects/NativeExample/app/.cxx/cmake/debug/x86_64\" native-lib",
+      "buildCommand": "C:\\Users\\Harrison Klas\\AppData\\Local\\Android\\Sdk\\cmake\\3.10.2.4988404\\bin\\ninja.exe -C \"C:\\Users\\Harrison Klas\\Documents\\PSA\\3DWeeds\\App_General\\Camera\\app\\.cxx\\cmake\\debug\\x86_64\" native-lib",
       "abi": "x86_64",
-      "output": "/Users/willburket/AndroidStudioProjects/NativeExample/app/build/intermediates/cmake/debug/obj/x86_64/libnative-lib.so",
-      "runtimeFiles": [
-        "/Users/willburket/AndroidStudioProjects/NativeExample/app/build/jni/x86_64/librealsense2.so"
-      ]
+      "output": "C:\\Users\\Harrison Klas\\Documents\\PSA\\3DWeeds\\App_General\\Camera\\app\\build\\intermediates\\cmake\\debug\\obj\\x86_64\\libnative-lib.so",
+      "runtimeFiles": []
     }
   }
 }

@@ -21,6 +21,8 @@ import android.widget.Toast;
 import androidx.appcompat.app.AppCompatActivity;
 
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
+import com.intel.realsense.librealsense.DeviceListener;
+import com.intel.realsense.librealsense.RsContext;
 
 import java.io.File;
 import java.util.ArrayList;
@@ -34,6 +36,13 @@ public class FilesActivity extends AppCompatActivity {
     boolean[] selected;
     File[] files;
     LinearLayout bottom_buttons;
+
+    private RsContext mRsContext;
+
+    // Used to load the 'native-lib' library on application startup.
+    static {
+        System.loadLibrary("native-lib");
+    }
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -195,11 +204,27 @@ public class FilesActivity extends AppCompatActivity {
         });
 
         // add camera floating action button
-        FloatingActionButton camera = (FloatingActionButton) findViewById(R.id.take_picture);
+        final FloatingActionButton camera = (FloatingActionButton) findViewById(R.id.take_picture);
+        camera.setEnabled(false);
         camera.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 startActivity(new Intent(FilesActivity.this, StreamActivity.class));
+            }
+        });
+
+        RsContext.init(getApplicationContext());
+        //Register to notifications regarding RealSense devices attach/detach events via the DeviceListener.
+        mRsContext = new RsContext();
+        mRsContext.setDevicesChangedCallback(new DeviceListener() {
+            @Override
+            public void onDeviceAttach() {
+                camera.setEnabled(true);
+            }
+
+            @Override
+            public void onDeviceDetach() {
+                camera.setEnabled(false);
             }
         });
     }

@@ -18,85 +18,68 @@
         android:orientation="horizontal"
         android:layout_marginTop="25dp"
         android:id="@+id/linearLayout"
-        android:weightSum="3">
+        android:weightSum="2">
         <LinearLayout
             android:layout_width="0dp"
             android:layout_height="match_parent"
             android:layout_weight="1"
             android:orientation="vertical">
-            <TextView
-                android:textSize="25sp"
-                android:gravity="center"
-                android:text="Camera"
+            <Button
+                android:enabled="false"
                 android:layout_width="match_parent"
-                android:layout_height="50dp" />
-            <TextView
-                android:textSize="25sp"
-                android:gravity="center"
-                android:text="Resolution"
-                android:layout_width="match_parent"
-                android:layout_height="50dp" />
-            <TextView
-                android:textSize="25sp"
-                android:gravity="center"
-                android:text="FPS"
-                android:layout_width="match_parent"
-                android:layout_height="50dp" />
-            <TextView
-                android:textSize="25sp"
-                android:gravity="center"
-                android:text="FOV"
-                android:layout_width="match_parent"
-                android:layout_height="50dp" />
-        </LinearLayout>
-        <LinearLayout
-            android:layout_width="0dp"
-            android:layout_height="match_parent"
-            android:layout_weight="1"
-            android:orientation="vertical">
-            <TextView
-                android:textSize="25sp"
-                android:gravity="center"
-                android:text="Depth"
-                android:layout_width="match_parent"
-                android:layout_height="50dp" />
-            <Spinner
-                android:id="@+id/Depth_res"
+                android:layout_height="100dp"
+                android:text="@string/gopro"/>
+            <EditText
                 android:layout_width="match_parent"
                 android:layout_height="50dp"
-                android:dropDownSelector="@color/black"/>
-            <Spinner
-                android:id="@+id/Depth_FPS"
+                android:ems="10"
+                android:inputType="number"
+                android:hint="Resolution"/>
+            <EditText
                 android:layout_width="match_parent"
-                android:layout_height="50dp"/>
-            <Spinner
-                android:id="@+id/Depth_FOV"
+                android:layout_height="50dp"
+                android:ems="10"
+                android:inputType="number"
+                android:hint="FPS"/>
+            <EditText
                 android:layout_width="match_parent"
-                android:layout_height="50dp"/>
+                android:layout_height="50dp"
+                android:ems="10"
+                android:inputType="number"
+                android:hint="FOV"/>
         </LinearLayout>
         <LinearLayout
             android:layout_width="0dp"
             android:layout_height="match_parent"
             android:layout_weight="1"
             android:orientation="vertical">
-            <TextView
-                android:textSize="25sp"
-                android:gravity="center"
-                android:text="RGB"
+            <Button
+                android:id="@+id/intel_setup"
                 android:layout_width="match_parent"
-                android:layout_height="50dp" />
-            <Spinner
-                android:id="@+id/RGB_res"
+                android:layout_height="100dp"
+                android:text="@string/intel"
+                android:enabled="false"/>
+            <EditText
+                android:id="@+id/intel_resolution"
                 android:layout_width="match_parent"
-                android:layout_height="50dp"/>
-            <Spinner
-                android:id="@+id/RGB_FPS"
+                android:layout_height="50dp"
+                android:ems="10"
+                android:inputType="number"
+                android:hint="Resolution" />
+            <EditText
+                android:id="@+id/intel_FPS"
                 android:layout_width="match_parent"
-                android:layout_height="50dp"/>
-            <Spinner
-                android:id="@+id/RGB_FOV"
+                android:layout_height="50dp"
+                android:ems="10"
+                android:inputType="number"
+                android:hint="FPS"/>
+            <EditText
+                android:id="@+id/intel_FOV"
                 android:layout_width="match_parent"
-                android:layout_height="50dp"/>
+                android:layout_height="50dp"
+                android:ems="10"
+                android:inputType="number"
+                android:hint="FOV"/>
 
         </LinearLayout>
 

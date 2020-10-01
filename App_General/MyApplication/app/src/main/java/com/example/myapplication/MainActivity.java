@@ -1,18 +1,10 @@
 package com.example.myapplication;
 
-import androidx.annotation.NonNull;
-import androidx.appcompat.app.AppCompatActivity;
-import androidx.core.app.ActivityCompat;
-import androidx.core.content.ContextCompat;
-
 import android.Manifest;
 import android.annotation.SuppressLint;
 import android.app.ActivityManager;
-import android.content.Context;
 import android.content.Intent;
 import android.content.pm.PackageManager;
-import android.location.LocationListener;
-import android.location.LocationManager;
 import android.os.Bundle;
 import android.os.Looper;
 import android.view.View;
@@ -20,22 +12,23 @@ import android.widget.Button;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import androidx.annotation.NonNull;
+import androidx.appcompat.app.AppCompatActivity;
+import androidx.core.app.ActivityCompat;
+
 import com.google.android.gms.location.LocationCallback;
 import com.google.android.gms.location.LocationRequest;
 import com.google.android.gms.location.LocationResult;
 import com.google.android.gms.location.LocationServices;
+import com.intel.realsense.librealsense.DeviceListener;
+import com.intel.realsense.librealsense.RsContext;
 
-import java.sql.Time;
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
-import java.time.Clock;
 import java.util.Calendar;
 import java.util.Date;
 import java.util.Locale;
 import java.util.Objects;
-
-import com.intel.realsense.librealsense.DeviceListener;
-import com.intel.realsense.librealsense.RsContext;
 
 public class MainActivity extends AppCompatActivity {
 
@@ -49,6 +42,8 @@ public class MainActivity extends AppCompatActivity {
     };
     private static final int PERMISSIONS_COUNT = PERMISSIONS.length;
     TextView textViewLocation;
+
+    TextView camera_connected;
 
     private RsContext mRsContext;
 
@@ -106,22 +101,23 @@ public class MainActivity extends AppCompatActivity {
             }
         });
 
+        camera_connected = (TextView) findViewById(R.id.camera_connected);
         //RsContext.init must be called once in the application's lifetime before any interaction with physical RealSense devices.
         //For multi activities applications use the application context instead of the activity context
         RsContext.init(getApplicationContext());
-
         printMessage();
-
         //Register to notifications regarding RealSense devices attach/detach events via the DeviceListener.
         mRsContext = new RsContext();
         mRsContext.setDevicesChangedCallback(new DeviceListener() {
             @Override
             public void onDeviceAttach() {
+                camera_connected.setTextColor(R.color.white);
                 printMessage();
             }
 
             @Override
             public void onDeviceDetach() {
+                camera_connected.setTextColor(R.color.red);
                 printMessage();
             }
         });
@@ -197,7 +193,7 @@ public class MainActivity extends AppCompatActivity {
         runOnUiThread(new Runnable() {
             @Override
             public void run() {
-                TextView camera_connected = (TextView) findViewById(R.id.camera_connected);
+
                 camera_connected.setText("This app use librealsense: " + version + "\n" + cameraCountString);
             }
         });

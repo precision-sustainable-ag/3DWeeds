@@ -63,7 +63,8 @@
             <Spinner
                 android:id="@+id/Depth_res"
                 android:layout_width="match_parent"
-                android:layout_height="50dp" />
+                android:layout_height="50dp"
+                android:dropDownSelector="@color/black"/>
             <Spinner
                 android:id="@+id/Depth_FPS"
                 android:layout_width="match_parent"

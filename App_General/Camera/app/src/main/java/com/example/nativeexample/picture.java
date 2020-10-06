@@ -35,7 +35,7 @@ public class picture extends AppCompatActivity {
     private static final int PERMISSIONS_REQUEST_CAMERA = 0;
     private static final int PERMISSIONS_REQUEST_WRITE = 1;
 
-    private boolean mPermissionsGranted = false;
+    private boolean mPermissionsGranted = true;         //set permissions to true
 
     private Context mAppContext;
     private TextView mBackGroundText;
@@ -49,6 +49,7 @@ public class picture extends AppCompatActivity {
     private FloatingActionButton mStartRecordFab;
     private FloatingActionButton mStopRecordFab;
 
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -61,10 +62,17 @@ public class picture extends AppCompatActivity {
         mStartRecordFab = findViewById(R.id.startRecordFab);
         mStopRecordFab = findViewById(R.id.stopRecordFab);
 
-        mStartRecordFab.setOnClickListener(new View.OnClickListener() {
+        mGLSurfaceView.setSystemUiVisibility(View.SYSTEM_UI_FLAG_LOW_PROFILE
+                | View.SYSTEM_UI_FLAG_FULLSCREEN
+                | View.SYSTEM_UI_FLAG_LAYOUT_STABLE
+                | View.SYSTEM_UI_FLAG_IMMERSIVE_STICKY
+                | View.SYSTEM_UI_FLAG_LAYOUT_HIDE_NAVIGATION
+                | View.SYSTEM_UI_FLAG_HIDE_NAVIGATION);
+
+        mStartRecordFab.setOnClickListener(new View.OnClickListener() {         //start recording button
             @Override
             public void onClick(View view) {
-                toggleRecording();
+                toggleRecording();                                          // toggle recording
             }
         });
         mStopRecordFab.setOnClickListener(new View.OnClickListener() {
@@ -74,19 +82,6 @@ public class picture extends AppCompatActivity {
             }
         });
 
-        // Android 9 also requires camera permissions
-        if (android.os.Build.VERSION.SDK_INT > android.os.Build.VERSION_CODES.O &&
-                ContextCompat.checkSelfPermission(this, Manifest.permission.CAMERA) != PackageManager.PERMISSION_GRANTED) {
-            ActivityCompat.requestPermissions(this, new String[]{Manifest.permission.CAMERA}, PERMISSIONS_REQUEST_CAMERA);
-            return;
-        }
-
-        if (ContextCompat.checkSelfPermission(this, Manifest.permission.WRITE_EXTERNAL_STORAGE) != PackageManager.PERMISSION_GRANTED) {
-            ActivityCompat.requestPermissions(this, new String[]{Manifest.permission.WRITE_EXTERNAL_STORAGE}, 0);
-            return;
-        }
-
-        mPermissionsGranted = true;
     }
 
     @Override
@@ -102,10 +97,7 @@ public class picture extends AppCompatActivity {
             return;
         }
 
-        if (ContextCompat.checkSelfPermission(this, Manifest.permission.WRITE_EXTERNAL_STORAGE) != PackageManager.PERMISSION_GRANTED) {
-            ActivityCompat.requestPermissions(this, new String[]{Manifest.permission.WRITE_EXTERNAL_STORAGE}, 0);
-            return;
-        }
+
 
         mPermissionsGranted = true;
     }
@@ -129,8 +121,10 @@ public class picture extends AppCompatActivity {
     }
 
     private String getFilePath(){
-        File folder = new File(Environment.getExternalStorageDirectory().getAbsolutePath() + File.separator + "rs_bags");
+        File folder = new File(Environment.getExternalStorageDirectory() + File.separator + "rs_bags");
+
         folder.mkdir();
+
         SimpleDateFormat sdf = new SimpleDateFormat("yyyyMMdd_HHmmss");
         String currentDateAndTime = sdf.format(new Date());
         File file = new File(folder, currentDateAndTime + ".bag");
@@ -138,11 +132,10 @@ public class picture extends AppCompatActivity {
     }
 
     void init(){
-        //RsContext.init must be called once in the application lifetime before any interaction with physical RealSense devices.
-        //For multi activities applications use the application context instead of the activity context
+
         RsContext.init(mAppContext);
 
-        //Register to notifications regarding RealSense devices attach/detach events via the DeviceListener.
+
         mRsContext = new RsContext();
         mRsContext.setDevicesChangedCallback(mListener);
 
@@ -160,24 +153,53 @@ public class picture extends AppCompatActivity {
         runOnUiThread(new Runnable() {
             @Override
             public void run() {
-                mBackGroundText.setVisibility(state ? View.VISIBLE : View.GONE);
-               // mStartRecordFab.show(!state ? View.VISIBLE : View.GONE);
 
-                mStartRecordFab.show();
-                mStopRecordFab.show();
+                if (state){
+                    mBackGroundText.setVisibility(View.VISIBLE);
+                    mStartRecordFab.hide();
+                }
+                else{
+                    mStartRecordFab.show();
+                    mBackGroundText.setVisibility(View.GONE);
+                }
+
+                mStopRecordFab.hide();
+
 
             }
         });
     }
 
     private void toggleRecording(){
-        stop();
-        start(mStartRecordFab.getVisibility() == View.VISIBLE);
+
+
+        if (mStartRecordFab.getVisibility() == View.VISIBLE){
+            start(true);
+        }
+        else {
+            stop();
+        }
+
         runOnUiThread(new Runnable() {
             @Override
             public void run() {
-                mStartRecordFab.hide();
-                mStopRecordFab.hide();
+                if(mStartRecordFab.getVisibility() == View.GONE){
+                 //   start(true);
+                    mStartRecordFab.show();
+
+                }
+                else{
+                    mStartRecordFab.hide();
+                 //   start(true);
+                }
+
+                if(mStopRecordFab.getVisibility() == View.GONE){
+                    mStopRecordFab.show();
+                }
+                else{
+                    mStopRecordFab.hide();
+                }
+
 
             }
         });
@@ -195,6 +217,7 @@ public class picture extends AppCompatActivity {
             stop();
         }
     };
+
 
     Runnable mStreaming = new Runnable() {
         @Override

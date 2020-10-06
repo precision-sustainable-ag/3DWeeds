@@ -1,11 +1,48 @@
 package com.example.myapplication;
 
+import androidx.annotation.NonNull;
+import androidx.appcompat.app.AppCompatActivity;
+import androidx.core.app.ActivityCompat;
+import androidx.core.content.ContextCompat;
+
+import android.Manifest;
+import android.app.ActivityManager;
+import android.content.Context;
+import android.content.Intent;
+import android.content.pm.PackageManager;
+import android.location.LocationListener;
+import android.location.LocationManager;
 import android.os.Bundle;
+<<<<<<< HEAD
 import android.view.View;
 import android.view.Window;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.Spinner;
+=======
+import android.os.Looper;
+import android.view.View;
+import android.view.Window;
+import android.widget.Button;
+import android.widget.EditText;
+import android.widget.Switch;
+import android.widget.TextView;
+import android.widget.Toast;
+
+import com.google.android.gms.location.LocationCallback;
+import com.google.android.gms.location.LocationRequest;
+import com.google.android.gms.location.LocationResult;
+import com.google.android.gms.location.LocationServices;
+
+import java.sql.Time;
+import java.text.DateFormat;
+import java.text.SimpleDateFormat;
+import java.time.Clock;
+import java.util.Calendar;
+import java.util.Date;
+import java.util.Locale;
+import java.util.Objects;
+>>>>>>> 8f58b95ca63129ae98a1c65481e578685ce2585c
 
 import androidx.appcompat.app.AppCompatActivity;
 
@@ -26,6 +63,7 @@ public class CameraActivity extends AppCompatActivity {
         this.requestWindowFeature(Window.FEATURE_NO_TITLE);
         setContentView(R.layout.select_camera);
 
+<<<<<<< HEAD
         // setting up all the spiners
         setupSpinners();
 
@@ -83,5 +121,19 @@ public class CameraActivity extends AppCompatActivity {
                 R.array.FPS, android.R.layout.simple_spinner_item);
         adapter3.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
         RGB_FPS.setAdapter(adapter3);
+=======
+        // Set up intel camera
+        Button intelSetup = (Button) findViewById(R.id.intel_setup);
+        intelSetup.setClickable(false);
+        final EditText intelRes = (EditText) findViewById(R.id.intel_resolution);
+        EditText intelFPS = (EditText) findViewById(R.id.intel_FPS);
+
+        intelSetup.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                Toast.makeText(CameraActivity.this, "Camera Not Detected!", Toast.LENGTH_SHORT).show();
+            }
+        });
+>>>>>>> 8f58b95ca63129ae98a1c65481e578685ce2585c
     }
 }

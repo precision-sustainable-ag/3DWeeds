@@ -34,12 +34,13 @@
         android:id="@+id/startRecordFab"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
+        android:layout_gravity="bottom|end"
         android:layout_alignParentBottom="true"
         android:layout_centerHorizontal="true"
         android:layout_marginBottom="40dp"
         android:clickable="true"
         android:backgroundTint="#706E6E"
-        android:visibility="gone"
+
         app:srcCompat="@android:drawable/ic_notification_overlay" />
 
     <android.support.design.widget.FloatingActionButton

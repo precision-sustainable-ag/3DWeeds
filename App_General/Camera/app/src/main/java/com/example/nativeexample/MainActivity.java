@@ -30,6 +30,8 @@ public class MainActivity extends AppCompatActivity {
         if (ContextCompat.checkSelfPermission(this, Manifest.permission.CAMERA) != PackageManager.PERMISSION_GRANTED) {
             ActivityCompat.requestPermissions(this, new String[]{Manifest.permission.CAMERA}, MY_PERMISSIONS_REQUEST_CAMERA);
         }
+
+
     }
 
     @Override
@@ -94,6 +96,16 @@ public class MainActivity extends AppCompatActivity {
                 Intent pictureIntent = new Intent(getApplicationContext(),
                         picture.class);
                         startActivity(pictureIntent);
+            }
+        });
+
+        final Button files = findViewById(R.id.files);
+        files.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                Intent filesIntent = new Intent(getApplicationContext(),
+                        files.class);
+                startActivity(filesIntent);
             }
         });
 

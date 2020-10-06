@@ -1,39 +1,41 @@
 {
   "stringTable": {
-    "0": "C:/Users/Harrison Klas/Documents/PSA/3DWeeds/App_General/Camera/app/.cxx/cmake/release/arm64-v8a",
-    "1": "--target=aarch64-none-linux-android21 --gcc-toolchain=C:/Users/Harrison Klas/AppData/Local/Android/Sdk/ndk/21.0.6113669/toolchains/llvm/prebuilt/windows-x86_64 --sysroot=C:/Users/Harrison Klas/AppData/Local/Android/Sdk/ndk/21.0.6113669/toolchains/llvm/prebuilt/windows-x86_64/sysroot -Dnative_lib_EXPORTS -I../../../../src/main/cpp/include -g -DANDROID -fdata-sections -ffunction-sections -funwind-tables -fstack-protector-strong -no-canonical-prefixes -D_FORTIFY_SOURCE=2 -Wformat -Werror=format-security -fexceptions -O2 -DNDEBUG -fPIC"
+    "0": "/Users/willburket/AndroidStudioProjects/NativeExample/app/.cxx/cmake/release/arm64-v8a",
+    "1": "--target=aarch64-none-linux-android21 --gcc-toolchain=/Users/willburket/Library/Android/sdk/ndk/21.0.6113669/toolchains/llvm/prebuilt/darwin-x86_64 --sysroot=/Users/willburket/Library/Android/sdk/ndk/21.0.6113669/toolchains/llvm/prebuilt/darwin-x86_64/sysroot -Dnative_lib_EXPORTS -I../../../../src/main/cpp/include -g -DANDROID -fdata-sections -ffunction-sections -funwind-tables -fstack-protector-strong -no-canonical-prefixes -D_FORTIFY_SOURCE=2 -Wformat -Werror=format-security -fexceptions -O2 -DNDEBUG -fPIC"
   },
   "buildFiles": [
-    "C:\\Users\\Harrison Klas\\AppData\\Local\\Android\\Sdk\\ndk\\21.0.6113669\\build\\cmake\\platforms.cmake",
-    "C:\\Users\\Harrison Klas\\Documents\\PSA\\3DWeeds\\App_General\\Camera\\app\\CMakeLists.txt",
-    "C:\\Users\\Harrison Klas\\AppData\\Local\\Android\\Sdk\\ndk\\21.0.6113669\\build\\cmake\\android.toolchain.cmake"
+    "/Users/willburket/Library/Android/sdk/ndk/21.0.6113669/build/cmake/android.toolchain.cmake",
+    "/Users/willburket/Library/Android/sdk/ndk/21.0.6113669/build/cmake/platforms.cmake",
+    "/Users/willburket/AndroidStudioProjects/NativeExample/app/CMakeLists.txt"
   ],
   "cleanCommands": [
-    "C:\\Users\\Harrison Klas\\AppData\\Local\\Android\\Sdk\\cmake\\3.10.2.4988404\\bin\\ninja.exe -C \"C:\\Users\\Harrison Klas\\Documents\\PSA\\3DWeeds\\App_General\\Camera\\app\\.cxx\\cmake\\release\\arm64-v8a\" clean"
+    "/Users/willburket/Library/Android/sdk/cmake/3.10.2.4988404/bin/ninja -C \"/Users/willburket/AndroidStudioProjects/NativeExample/app/.cxx/cmake/release/arm64-v8a\" clean"
   ],
-  "buildTargetsCommand": "C:\\Users\\Harrison Klas\\AppData\\Local\\Android\\Sdk\\cmake\\3.10.2.4988404\\bin\\ninja.exe  -C \"C:\\Users\\Harrison Klas\\Documents\\PSA\\3DWeeds\\App_General\\Camera\\app\\.cxx\\cmake\\release\\arm64-v8a\" {LIST_OF_TARGETS_TO_BUILD}",
+  "buildTargetsCommand": "/Users/willburket/Library/Android/sdk/cmake/3.10.2.4988404/bin/ninja  -C \"/Users/willburket/AndroidStudioProjects/NativeExample/app/.cxx/cmake/release/arm64-v8a\" {LIST_OF_TARGETS_TO_BUILD}",
   "libraries": {
     "native-lib-Release-arm64-v8a": {
-      "buildCommand": "C:\\Users\\Harrison Klas\\AppData\\Local\\Android\\Sdk\\cmake\\3.10.2.4988404\\bin\\ninja.exe -C \"C:\\Users\\Harrison Klas\\Documents\\PSA\\3DWeeds\\App_General\\Camera\\app\\.cxx\\cmake\\release\\arm64-v8a\" native-lib",
+      "buildCommand": "/Users/willburket/Library/Android/sdk/cmake/3.10.2.4988404/bin/ninja -C \"/Users/willburket/AndroidStudioProjects/NativeExample/app/.cxx/cmake/release/arm64-v8a\" native-lib",
       "buildType": "release",
-      "toolchain": "3017609600",
+      "toolchain": "268025065",
       "abi": "arm64-v8a",
       "artifactName": "native-lib",
       "files": [
         {
-          "src": "C:\\Users\\Harrison Klas\\Documents\\PSA\\3DWeeds\\App_General\\Camera\\app\\src\\main\\cpp\\native-lib.cpp",
+          "src": "/Users/willburket/AndroidStudioProjects/NativeExample/app/src/main/cpp/native-lib.cpp",
           "flagsOrdinal": 1,
           "workingDirectoryOrdinal": 0
         }
       ],
       "headers": [],
-      "output": "C:\\Users\\Harrison Klas\\Documents\\PSA\\3DWeeds\\App_General\\Camera\\app\\build\\intermediates\\cmake\\release\\obj\\arm64-v8a\\libnative-lib.so",
-      "runtimeFiles": []
+      "output": "/Users/willburket/AndroidStudioProjects/NativeExample/app/build/intermediates/cmake/release/obj/arm64-v8a/libnative-lib.so",
+      "runtimeFiles": [
+        "/Users/willburket/AndroidStudioProjects/NativeExample/app/build/jni/arm64-v8a/librealsense2.so"
+      ]
     }
   },
   "toolchains": {
-    "3017609600": {
-      "cppCompilerExecutable": "C:\\Users\\HARRIS~1\\AppData\\Local\\Android\\Sdk\\ndk\\210~1.611\\TOOLCH~1\\llvm\\prebuilt\\WINDOW~1\\bin\\CLANG_~1.EXE"
+    "268025065": {
+      "cppCompilerExecutable": "/Users/willburket/Library/Android/sdk/ndk/21.0.6113669/toolchains/llvm/prebuilt/darwin-x86_64/bin/clang++"
     }
   },
   "cFileExtensions": [],

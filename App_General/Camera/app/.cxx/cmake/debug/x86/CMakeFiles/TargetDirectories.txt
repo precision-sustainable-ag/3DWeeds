@@ -1,3 +1,0 @@
-C:/Users/Harrison Klas/Documents/PSA/3DWeeds/App_General/Camera/app/.cxx/cmake/debug/x86/CMakeFiles/native-lib.dir
-C:/Users/Harrison Klas/Documents/PSA/3DWeeds/App_General/Camera/app/.cxx/cmake/debug/x86/CMakeFiles/edit_cache.dir
-C:/Users/Harrison Klas/Documents/PSA/3DWeeds/App_General/Camera/app/.cxx/cmake/debug/x86/CMakeFiles/rebuild_cache.dir

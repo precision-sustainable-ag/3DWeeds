@@ -209,7 +209,11 @@ public class FilesActivity extends AppCompatActivity {
         camera.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                startActivity(new Intent(FilesActivity.this, StreamActivity.class));
+                // pass root
+                String passRootDirectory = rootPath;
+                Intent intent = new Intent(FilesActivity.this, VideoActivity.class);
+                intent.putExtra("ROOT", passRootDirectory);
+                startActivity(intent);
             }
         });
 

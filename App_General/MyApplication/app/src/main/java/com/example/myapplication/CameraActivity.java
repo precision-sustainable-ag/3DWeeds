@@ -1,13 +1,24 @@
 package com.example.myapplication;
 
 import android.os.Bundle;
+import android.view.View;
 import android.view.Window;
 import android.widget.ArrayAdapter;
+import android.widget.Button;
 import android.widget.Spinner;
 
 import androidx.appcompat.app.AppCompatActivity;
 
+import com.intel.realsense.librealsense.DeviceListener;
+import com.intel.realsense.librealsense.RsContext;
+
 public class CameraActivity extends AppCompatActivity {
+    private RsContext mRsContext;
+
+    // Used to load the 'native-lib' library on application startup.
+    static {
+        System.loadLibrary("native-lib");
+    }
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -17,6 +28,30 @@ public class CameraActivity extends AppCompatActivity {
 
         // setting up all the spiners
         setupSpinners();
+
+        final Button configure_camera = (Button) findViewById(R.id.configure_camera);
+        RsContext.init(getApplicationContext());
+        //Register to notifications regarding RealSense devices attach/detach events via the DeviceListener.
+        mRsContext = new RsContext();
+        mRsContext.setDevicesChangedCallback(new DeviceListener() {
+            @Override
+            public void onDeviceAttach() {
+                configure_camera.setEnabled(true);
+            }
+
+            @Override
+            public void onDeviceDetach() {
+                configure_camera.setEnabled(false);
+            }
+        });
+
+        // configuring camera
+        configure_camera.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+
+            }
+        });
 
     }
 

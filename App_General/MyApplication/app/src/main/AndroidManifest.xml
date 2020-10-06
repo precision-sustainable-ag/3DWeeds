@@ -40,6 +40,9 @@
         <activity
             android:name=".StreamActivity"
             android:theme="@style/FileTheme" />
+        <activity
+            android:name=".VideoActivity"
+            android:theme="@style/FileTheme" />
     </application>
 
 </manifest>

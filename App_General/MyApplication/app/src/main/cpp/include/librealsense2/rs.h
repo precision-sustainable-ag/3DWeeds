@@ -23,9 +23,9 @@ extern "C" {
 #include "h/rs_sensor.h"
 
 #define RS2_API_MAJOR_VERSION    2
-#define RS2_API_MINOR_VERSION    38
-#define RS2_API_PATCH_VERSION    1
-#define RS2_API_BUILD_VERSION    2225
+#define RS2_API_MINOR_VERSION    39
+#define RS2_API_PATCH_VERSION    0
+#define RS2_API_BUILD_VERSION    2342
 
 #ifndef STRINGIFY
 #define STRINGIFY(arg) #arg

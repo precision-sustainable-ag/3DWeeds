@@ -33,6 +33,9 @@ import java.text.SimpleDateFormat;
 import java.util.Date;
 
 public class VideoActivity extends AppCompatActivity {
+    // GlobalClass variable
+    GlobalClass globalClass;
+
     private static final String TAG = "librs recording example";
     private static final int PERMISSIONS_REQUEST_CAMERA = 0;
     private static final int PERMISSIONS_REQUEST_WRITE = 1;
@@ -55,11 +58,29 @@ public class VideoActivity extends AppCompatActivity {
     int clicked;
 
     int i;
+    // resolution variables
+    int depth_height, depth_width, RGB_height, RGB_width;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_video);
+
+        // get camera settings
+        globalClass = (GlobalClass) getApplicationContext();
+        // get depth resolution settings
+        String depth_res = globalClass.getDepth_res();
+        String[] depth_tokens = depth_res.split("x");
+        depth_width = Integer.parseInt(depth_tokens[0]);
+        depth_height = Integer.parseInt(depth_tokens[1]);
+        // get RGB resolution settings
+        String RGB_res = globalClass.getRGB_res();
+        String[] RGB_tokens = RGB_res.split("x");
+        RGB_width = Integer.parseInt(depth_tokens[0]);
+        RGB_height = Integer.parseInt(depth_tokens[1]);
+        Toast.makeText(VideoActivity.this, RGB_res, Toast.LENGTH_SHORT).show();
+
+
 
         rootPath = getIntent().getStringExtra("ROOT");
 
@@ -254,8 +275,8 @@ public class VideoActivity extends AppCompatActivity {
             Log.d(TAG, "try start streaming");
             try(Config cfg = new Config()) {
                 int b = 0;
-                cfg.enableStream(StreamType.DEPTH, 640, 480);
-                cfg.enableStream(StreamType.COLOR, 640, 480);
+                cfg.enableStream(StreamType.DEPTH, depth_width, depth_height);
+                cfg.enableStream(StreamType.COLOR, RGB_width, RGB_height);
                 if (record)
                    i = 1;
                     cfg.enableRecordToFile(getFilePath());

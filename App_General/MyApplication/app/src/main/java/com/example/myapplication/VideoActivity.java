@@ -76,10 +76,8 @@ public class VideoActivity extends AppCompatActivity {
         // get RGB resolution settings
         String RGB_res = globalClass.getRGB_res();
         String[] RGB_tokens = RGB_res.split("x");
-        RGB_width = Integer.parseInt(depth_tokens[0]);
-        RGB_height = Integer.parseInt(depth_tokens[1]);
-        Toast.makeText(VideoActivity.this, RGB_res, Toast.LENGTH_SHORT).show();
-
+        RGB_width = Integer.parseInt(RGB_tokens[0]);
+        RGB_height = Integer.parseInt(RGB_tokens[1]);
 
 
         rootPath = getIntent().getStringExtra("ROOT");

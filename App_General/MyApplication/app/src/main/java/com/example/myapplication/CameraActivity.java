@@ -6,6 +6,7 @@ import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.Spinner;
+import android.widget.Toast;
 
 import androidx.appcompat.app.AppCompatActivity;
 
@@ -38,6 +39,7 @@ public class CameraActivity extends AppCompatActivity {
                     globalClass.setDepth_res(Depth_res.getSelectedItem().toString());
                 if (RGB_res.getSelectedItem()!=null)
                     globalClass.setRGB_res(RGB_res.getSelectedItem().toString());
+                Toast.makeText(CameraActivity.this, "Camera Configured", Toast.LENGTH_SHORT).show();
             }
         });
 }

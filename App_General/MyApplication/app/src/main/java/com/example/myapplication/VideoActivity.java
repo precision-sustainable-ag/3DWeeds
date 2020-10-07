@@ -4,10 +4,12 @@ import android.Manifest;
 import android.content.Context;
 import android.content.pm.PackageManager;
 import android.os.Bundle;
+import android.os.Environment;
 import android.os.Handler;
 import android.util.Log;
 import android.view.View;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.app.ActivityCompat;
@@ -23,6 +25,12 @@ import com.intel.realsense.librealsense.Pipeline;
 import com.intel.realsense.librealsense.PipelineProfile;
 import com.intel.realsense.librealsense.RsContext;
 import com.intel.realsense.librealsense.StreamType;
+
+import java.io.File;
+import java.io.FileOutputStream;
+import java.io.FileWriter;
+import java.text.SimpleDateFormat;
+import java.util.Date;
 
 public class VideoActivity extends AppCompatActivity {
     private static final String TAG = "librs recording example";
@@ -44,6 +52,9 @@ public class VideoActivity extends AppCompatActivity {
     private FloatingActionButton mStopRecordFab;
 
     String rootPath;
+    int clicked;
+
+    int i;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -63,21 +74,23 @@ public class VideoActivity extends AppCompatActivity {
             @Override
             public void onClick(View view) {
                 toggleRecording();
+                clicked = 1;
             }
         });
         mStopRecordFab.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
                 toggleRecording();
+                clicked = 0;
             }
         });
 
         // Android 9 also requires camera permissions
-        if (android.os.Build.VERSION.SDK_INT > android.os.Build.VERSION_CODES.O &&
+       /* if (android.os.Build.VERSION.SDK_INT > android.os.Build.VERSION_CODES.O &&
                 ContextCompat.checkSelfPermission(this, Manifest.permission.CAMERA) != PackageManager.PERMISSION_GRANTED) {
             ActivityCompat.requestPermissions(this, new String[]{Manifest.permission.CAMERA}, PERMISSIONS_REQUEST_CAMERA);
             return;
-        }
+        }*/
 
         if (ContextCompat.checkSelfPermission(this, Manifest.permission.WRITE_EXTERNAL_STORAGE) != PackageManager.PERMISSION_GRANTED) {
             ActivityCompat.requestPermissions(this, new String[]{Manifest.permission.WRITE_EXTERNAL_STORAGE}, 0);
@@ -127,7 +140,15 @@ public class VideoActivity extends AppCompatActivity {
     }
 
     private String getFilePath(){
-        return rootPath;
+                    // external storage (line 1)
+      //  File folder = new File(Environment.getExternalStorageDirectory().getAbsolutePath() + File.separator + "rs_bags");
+        File folder = new File(rootPath);                       // saves in app internal storage
+        folder.mkdir();
+        SimpleDateFormat sdf = new SimpleDateFormat("yyyyMMdd_HHmmss");
+        String currentDateAndTime = sdf.format(new Date());
+        File file = new File(folder, currentDateAndTime + ".bag");
+        return file.getAbsolutePath();
+
     }
 
     void init(){
@@ -155,22 +176,43 @@ public class VideoActivity extends AppCompatActivity {
             public void run() {
                 mBackGroundText.setVisibility(state ? View.VISIBLE : View.GONE);
                 // mStartRecordFab.show(!state ? View.VISIBLE : View.GONE);
-
-                mStartRecordFab.show();
-                mStopRecordFab.show();
+                if(state){
+                    mStartRecordFab.hide();
+                }
+                else {
+                    mStartRecordFab.show();
+                }
+                mStopRecordFab.hide();
 
             }
         });
     }
 
     private void toggleRecording(){
-        stop();
-        start(mStartRecordFab.getVisibility() == View.VISIBLE);
+
+        if(mStartRecordFab.getVisibility() == View.VISIBLE) {
+            start(true);
+        }
+        else {
+            Toast.makeText(VideoActivity.this, "saved", Toast.LENGTH_SHORT).show();
+            stop();
+        }
         runOnUiThread(new Runnable() {
             @Override
             public void run() {
-                mStartRecordFab.hide();
-                mStopRecordFab.hide();
+                if(mStartRecordFab.getVisibility() == View.GONE){
+                    mStartRecordFab.show();
+                }
+                else {
+                    mStartRecordFab.hide();
+                }
+                if(mStopRecordFab.getVisibility() == View.GONE){
+                    mStopRecordFab.show();
+                }
+                else {
+                    mStopRecordFab.hide();
+                }
+
 
             }
         });
@@ -211,12 +253,30 @@ public class VideoActivity extends AppCompatActivity {
             mGLSurfaceView.clear();
             Log.d(TAG, "try start streaming");
             try(Config cfg = new Config()) {
+                int b = 0;
                 cfg.enableStream(StreamType.DEPTH, 640, 480);
                 cfg.enableStream(StreamType.COLOR, 640, 480);
                 if (record)
+                   i = 1;
                     cfg.enableRecordToFile(getFilePath());
+
                 // try statement needed here to release resources allocated by the Pipeline:start() method
-                try(PipelineProfile pp = mPipeline.start(cfg)){}
+
+                try(PipelineProfile pp = mPipeline.start(cfg)){
+                    while(i==1) {
+                        FileOutputStream fileOutputStream = new FileOutputStream(getFilePath());
+                        fileOutputStream.write(b);
+                        fileOutputStream.flush();
+                        b++;
+                    }
+                }
+
+
+               /* int b = 0;
+                while(record){
+                fileOutputStream.write(b);
+                b++;
+                }*/
             }
             mIsStreaming = true;
             mHandler.post(mStreaming);
@@ -230,6 +290,7 @@ public class VideoActivity extends AppCompatActivity {
         if(!mIsStreaming)
             return;
         try {
+            i = 0;
             Log.d(TAG, "try stop streaming");
             mIsStreaming = false;
             mHandler.removeCallbacks(mStreaming);

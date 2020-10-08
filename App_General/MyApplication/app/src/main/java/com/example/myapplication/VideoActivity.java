@@ -33,9 +33,6 @@ import java.text.SimpleDateFormat;
 import java.util.Date;
 
 public class VideoActivity extends AppCompatActivity {
-    // GlobalClass variable
-    GlobalClass globalClass;
-
     private static final String TAG = "librs recording example";
     private static final int PERMISSIONS_REQUEST_CAMERA = 0;
     private static final int PERMISSIONS_REQUEST_WRITE = 1;
@@ -48,6 +45,7 @@ public class VideoActivity extends AppCompatActivity {
     private boolean mIsStreaming = false;
     private final Handler mHandler = new Handler();
 
+
     private Pipeline mPipeline;
     private RsContext mRsContext;
 
@@ -58,26 +56,11 @@ public class VideoActivity extends AppCompatActivity {
     int clicked;
 
     int i;
-    // resolution variables
-    int depth_height, depth_width, RGB_height, RGB_width;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_video);
-
-        // get camera settings
-        globalClass = (GlobalClass) getApplicationContext();
-        // get depth resolution settings
-        String depth_res = globalClass.getDepth_res();
-        String[] depth_tokens = depth_res.split("x");
-        depth_width = Integer.parseInt(depth_tokens[0]);
-        depth_height = Integer.parseInt(depth_tokens[1]);
-        // get RGB resolution settings
-        String RGB_res = globalClass.getRGB_res();
-        String[] RGB_tokens = RGB_res.split("x");
-        RGB_width = Integer.parseInt(RGB_tokens[0]);
-        RGB_height = Integer.parseInt(RGB_tokens[1]);
 
 
         rootPath = getIntent().getStringExtra("ROOT");
@@ -93,14 +76,15 @@ public class VideoActivity extends AppCompatActivity {
             @Override
             public void onClick(View view) {
                 toggleRecording();
-                clicked = 1;
+                clicked = 0;
+
             }
         });
         mStopRecordFab.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
                 toggleRecording();
-                clicked = 0;
+                clicked = 1;
             }
         });
 
@@ -166,6 +150,7 @@ public class VideoActivity extends AppCompatActivity {
         SimpleDateFormat sdf = new SimpleDateFormat("yyyyMMdd_HHmmss");
         String currentDateAndTime = sdf.format(new Date());
         File file = new File(folder, currentDateAndTime + ".bag");
+
         return file.getAbsolutePath();
 
     }
@@ -208,28 +193,33 @@ public class VideoActivity extends AppCompatActivity {
     }
 
     private void toggleRecording(){
-
-        if(mStartRecordFab.getVisibility() == View.VISIBLE) {
+        //mStartRecordFab.getVisibility() == View.VISIBLE
+       /* if(mStartRecordFab.getVisibility() == View.VISIBLE) {
             start(true);
+
         }
         else {
             Toast.makeText(VideoActivity.this, "saved", Toast.LENGTH_SHORT).show();
             stop();
-        }
+        }*/
         runOnUiThread(new Runnable() {
             @Override
             public void run() {
                 if(mStartRecordFab.getVisibility() == View.GONE){
                     mStartRecordFab.show();
+                    stop();
+                    Toast.makeText(VideoActivity.this, "saved", Toast.LENGTH_SHORT).show();
                 }
                 else {
                     mStartRecordFab.hide();
+                    start(true);
                 }
                 if(mStopRecordFab.getVisibility() == View.GONE){
                     mStopRecordFab.show();
                 }
                 else {
                     mStopRecordFab.hide();
+
                 }
 
 
@@ -266,6 +256,7 @@ public class VideoActivity extends AppCompatActivity {
     };
 
     private synchronized void start(boolean record) {
+        i = 0;
         if(mIsStreaming)
             return;
         try{
@@ -273,29 +264,25 @@ public class VideoActivity extends AppCompatActivity {
             Log.d(TAG, "try start streaming");
             try(Config cfg = new Config()) {
                 int b = 0;
-                cfg.enableStream(StreamType.DEPTH, depth_width, depth_height);
-                cfg.enableStream(StreamType.COLOR, RGB_width, RGB_height);
+
+                cfg.enableStream(StreamType.DEPTH, 640, 480);
+                cfg.enableStream(StreamType.COLOR, 640, 480);
                 if (record)
-                   i = 1;
+                    i = 1;
                     cfg.enableRecordToFile(getFilePath());
+
 
                 // try statement needed here to release resources allocated by the Pipeline:start() method
 
-                try(PipelineProfile pp = mPipeline.start(cfg)){
-                    while(i==1) {
-                        FileOutputStream fileOutputStream = new FileOutputStream(getFilePath());
-                        fileOutputStream.write(b);
-                        fileOutputStream.flush();
-                        b++;
-                    }
-                }
+                try(PipelineProfile pp = mPipeline.start(cfg)){}
 
-
-               /* int b = 0;
-                while(record){
-                fileOutputStream.write(b);
-                b++;
+               /* while(i == 1) {
+                    FileOutputStream fileOutputStream = new FileOutputStream(getFilePath());
+                    fileOutputStream.write(b);
+                    fileOutputStream.flush();
+                    b++;
                 }*/
+
             }
             mIsStreaming = true;
             mHandler.post(mStreaming);

@@ -211,29 +211,33 @@ public class VideoActivity extends AppCompatActivity {
 
     private void toggleRecording(){
 
-        if(mStartRecordFab.getVisibility() == View.VISIBLE) {
+    /*    if(mStartRecordFab.getVisibility() == View.VISIBLE) {
             start(true);
         }
         else {
             Toast.makeText(VideoActivity.this, "saved", Toast.LENGTH_SHORT).show();
             stop();
-        }
+        }*/
         runOnUiThread(new Runnable() {
             @Override
             public void run() {
+
                 if(mStartRecordFab.getVisibility() == View.GONE){
                     mStartRecordFab.show();
+                    stop();
+                    Toast.makeText(VideoActivity.this, "saved", Toast.LENGTH_SHORT).show();
                 }
                 else {
                     mStartRecordFab.hide();
+                    start(true);
                 }
                 if(mStopRecordFab.getVisibility() == View.GONE){
                     mStopRecordFab.show();
                 }
                 else {
                     mStopRecordFab.hide();
-                }
 
+                }
 
             }
         });
@@ -284,12 +288,12 @@ public class VideoActivity extends AppCompatActivity {
                 // try statement needed here to release resources allocated by the Pipeline:start() method
 
                 try(PipelineProfile pp = mPipeline.start(cfg)){
-                    while(i==1) {
+                    /*while(i==1) {
                         FileOutputStream fileOutputStream = new FileOutputStream(getFilePath());
                         fileOutputStream.write(b);
                         fileOutputStream.flush();
                         b++;
-                    }
+                    }*/
                 }
 
 

@@ -6,6 +6,7 @@ import android.content.DialogInterface;
 import android.content.Intent;
 import android.graphics.Color;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -19,10 +20,17 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import androidx.appcompat.app.AppCompatActivity;
-
+import com.microsoft.azure.storage.CloudStorageAccount;
+import com.microsoft.azure.storage.blob.*;
+import java.util.UUID;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
 
+import java.io.ByteArrayOutputStream;
+import java.io.DataOutputStream;
 import java.io.File;
+import java.io.FileInputStream;
+import java.net.HttpURLConnection;
+import java.net.URL;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -34,6 +42,9 @@ public class FilesActivity extends AppCompatActivity {
     boolean[] selected;
     File[] files;
     LinearLayout bottom_buttons;
+    // GlobalClass variable
+    GlobalClass globalClass;
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -54,6 +65,9 @@ public class FilesActivity extends AppCompatActivity {
         customAdapter.notifyDataSetChanged();
 
         bottom_buttons = (LinearLayout) findViewById(R.id.bottom_buttons);
+
+        // global class
+        globalClass = (GlobalClass) getApplicationContext();
 
         // selecting an item
         // clicking on a directory
@@ -178,9 +192,14 @@ public class FilesActivity extends AppCompatActivity {
                     @Override
                     public void onClick(DialogInterface dialog, int which) {
                         // code to export to azure
+                        String path;
+                        for (int i=0; i<files.length; i++) {
+                            if (selected[i]) {
+                                AzureActivityKt.uploadImagesToAzure(files[i], globalClass.azureContainer);
+                            }
+                        }
                         updateFilesList();
                         customAdapter.notifyDataSetChanged();
-                        Toast.makeText(FilesActivity.this, "File(s) exported", Toast.LENGTH_SHORT).show();
                         bottom_buttons.setVisibility(View.GONE);
                     }
                 });
@@ -207,6 +226,7 @@ public class FilesActivity extends AppCompatActivity {
             }
         });
     }
+
 
     public void updateFilesList() {
         File dir = new File(rootPath);
@@ -276,6 +296,67 @@ public class FilesActivity extends AppCompatActivity {
 
         fileOrDirectory.delete();
     }
+
+    // upload file to azure blob storage
+    // Blob service SAS URL:  https://seniordesign2020.blob.core.windows.net/?sv=2019-12-12&ss=bfqt&srt=sco&sp=rwdlacupx&se=2020-10-08T16:11:41Z&st=2020-10-08T08:11:41Z&spr=https&sig=cOlRciIfYPdk%2BkEDxApTjnuqYJVIFKFMhqs7Fs86jow%3D
+    private static Boolean upload(String sasUrl, String filePath, String mimeType) {
+        try {
+            // Get the file data
+            File file = new File(filePath);
+            if (!file.exists()) {
+                return false;
+            }
+
+            String absoluteFilePath = file.getAbsolutePath();
+
+            FileInputStream fis = new FileInputStream(absoluteFilePath);
+            int bytesRead = 0;
+            ByteArrayOutputStream bos = new ByteArrayOutputStream();
+            byte[] b = new byte[1024];
+            while ((bytesRead = fis.read(b)) != -1) {
+                bos.write(b, 0, bytesRead);
+            }
+            fis.close();
+            byte[] bytes = bos.toByteArray();
+            // Post our image data (byte array) to the server
+            URL url = new URL(sasUrl.replace("\"", ""));
+            HttpURLConnection urlConnection = (HttpURLConnection) url.openConnection();
+            urlConnection.setDoOutput(true);
+            urlConnection.setConnectTimeout(15000);
+            urlConnection.setReadTimeout(15000);
+            urlConnection.setRequestMethod("PUT");
+            urlConnection.addRequestProperty("Content-Type", mimeType);
+            urlConnection.setRequestProperty("Content-Length", "" + bytes.length);
+            urlConnection.setRequestProperty("x-ms-blob-type", "BlockBlob");
+            // Write file data to server
+            DataOutputStream wr = new DataOutputStream(urlConnection.getOutputStream());
+            wr.write(bytes);
+            wr.flush();
+            wr.close();
+            int response = urlConnection.getResponseCode();
+            if (response == 201 && urlConnection.getResponseMessage().equals("Created")) {
+                return true;
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        return false;
+    }
+
+    /*
+    private void uploadImagesToAzure(File file) {
+        try {
+            CloudBlockBlob blob = globalClass.azureContainer.getBlockBlobReference(file.getName());
+            String path = file.getAbsolutePath().replace(file.getName(),"");
+            //Toast.makeText(this, path, Toast.LENGTH_SHORT).show();
+            blob.uploadFromFile(file.getAbsolutePath());
+            Toast.makeText(this, "Azure upload successful!", Toast.LENGTH_SHORT).show();
+        } catch (Exception e) {
+            Log.v("LXT", e.getMessage());
+            Toast.makeText(this, "Azure upload failed.", Toast.LENGTH_SHORT).show();
+        }
+    }
+    */
 
     @Override
     protected void onRestart() {

@@ -1,7 +1,8 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:orientation="vertical" android:layout_width="match_parent"
-    android:layout_height="match_parent">
+    android:layout_height="match_parent"
+    android:weightSum="2">
 
     <TextView
         android:textColor="@color/light"
@@ -19,8 +20,9 @@
         android:layout_height="100dp"
         android:layout_gravity="center"/>
     <LinearLayout
+        android:layout_weight="1"
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
+        android:layout_height="0dp"
         android:orientation="horizontal"
         android:layout_marginTop="25dp"
         android:id="@+id/linearLayout"
@@ -55,31 +57,37 @@
                 android:layout_width="match_parent"
                 android:layout_height="50dp" />
         </LinearLayout>
+
         <LinearLayout
             android:layout_width="0dp"
             android:layout_height="match_parent"
             android:layout_weight="1"
             android:orientation="vertical">
+
             <TextView
-                android:textSize="25sp"
+                android:layout_width="match_parent"
+                android:layout_height="50dp"
                 android:gravity="center"
                 android:text="Depth"
-                android:layout_width="match_parent"
-                android:layout_height="50dp" />
+                android:textSize="25sp" />
+
             <Spinner
                 android:id="@+id/Depth_res"
                 android:layout_width="match_parent"
                 android:layout_height="50dp"
-                android:dropDownSelector="@color/black"/>
+                android:dropDownSelector="@color/black" />
+
             <Spinner
                 android:id="@+id/Depth_FPS"
                 android:layout_width="match_parent"
-                android:layout_height="50dp"/>
+                android:layout_height="50dp" />
+
             <Spinner
                 android:id="@+id/Depth_FOV"
                 android:layout_width="match_parent"
-                android:layout_height="50dp"/>
+                android:layout_height="50dp" />
         </LinearLayout>
+
         <LinearLayout
             android:layout_width="0dp"
             android:layout_height="match_parent"
@@ -103,8 +111,15 @@
                 android:id="@+id/RGB_FOV"
                 android:layout_width="match_parent"
                 android:layout_height="50dp"/>
-
         </LinearLayout>
-
+    </LinearLayout>
+    <LinearLayout
+        android:layout_weight="1"
+        android:layout_width="match_parent"
+        android:layout_height="0dp">
+        <CheckBox
+            android:text="Outside?"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"/>
     </LinearLayout>
 </LinearLayout>

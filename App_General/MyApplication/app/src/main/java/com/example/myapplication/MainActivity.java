@@ -3,49 +3,55 @@ package com.example.myapplication;
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.app.ActivityCompat;
-import androidx.core.content.ContextCompat;
 
 import android.Manifest;
 import android.annotation.SuppressLint;
 import android.app.ActivityManager;
-import android.content.Context;
 import android.content.Intent;
 import android.content.pm.PackageManager;
-import android.location.LocationListener;
-import android.location.LocationManager;
 import android.os.Bundle;
 import android.os.Looper;
+import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.TextView;
 import android.widget.Toast;
+import android.webkit.WebView;
 
 import com.google.android.gms.location.LocationCallback;
 import com.google.android.gms.location.LocationRequest;
 import com.google.android.gms.location.LocationResult;
 import com.google.android.gms.location.LocationServices;
 
-import java.sql.Time;
+import java.net.URI;
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
-import java.time.Clock;
 import java.util.Calendar;
 import java.util.Date;
 import java.util.Locale;
+import java.util.Map;
 import java.util.Objects;
 
 import com.intel.realsense.librealsense.DeviceListener;
 import com.intel.realsense.librealsense.RsContext;
+import com.microsoft.azure.storage.Constants;
+import com.microsoft.azure.storage.StorageCredentialsSharedAccessSignature;
+import com.microsoft.azure.storage.StorageException;
+import com.microsoft.azure.storage.StorageUri;
+import com.microsoft.azure.storage.blob.CloudBlobClient;
+import com.microsoft.azure.storage.blob.CloudBlobContainer;
+import com.microsoft.azure.storage.core.PathUtility;
+
 
 public class MainActivity extends AppCompatActivity {
-
     private static final int REQUEST_CODE_LOCATION_PERMISSION = 1;
     private static final int REQUEST_PERMISSIONS = 1234;
     private static final String[] PERMISSIONS = {
             Manifest.permission.READ_EXTERNAL_STORAGE,
             Manifest.permission.WRITE_EXTERNAL_STORAGE,
             Manifest.permission.ACCESS_FINE_LOCATION,
-            Manifest.permission.CAMERA
+            Manifest.permission.CAMERA,
+            Manifest.permission.INTERNET
     };
     private static final int PERMISSIONS_COUNT = PERMISSIONS.length;
     TextView textViewLocation;
@@ -56,6 +62,11 @@ public class MainActivity extends AppCompatActivity {
     static {
         System.loadLibrary("native-lib");
     }
+
+    private String token;
+    // GlobalClass variable
+    GlobalClass globalClass;
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -71,6 +82,17 @@ public class MainActivity extends AppCompatActivity {
         // display date and time
         TextView textViewDate = findViewById(R.id.date);
         textViewDate.setText(currentDateandTime);
+
+        // global class
+        globalClass = (GlobalClass) getApplicationContext();
+        globalClass.setCamera_connected(false);
+        globalClass.sasToken = "?sv=2019-10-10&ss=bfqt&srt=sco&sp=rwdlacup&se=2020-11-05T09:03:47Z&st=2020-11-05T01:03:47Z&spr=https&sig=mQ55wg1xvQ7vzEPe2j1grgyGDOGLpQXmDl9Z9%2FTuzS4%3D";
+        globalClass.uriStorage = new StorageUri(URI.create("https://weedsmedia.blob.core.usgovcloudapi.net/"));
+        globalClass.azureContainer = null;
+
+        // azure setup
+        //AzureActivityKt.setupAzure(globalClass.sasToken, globalClass.uriStorage);
+        setupAzure();
 
         // getting location
         // checking permissions for location and storage first
@@ -117,11 +139,13 @@ public class MainActivity extends AppCompatActivity {
         mRsContext.setDevicesChangedCallback(new DeviceListener() {
             @Override
             public void onDeviceAttach() {
+                globalClass.setCamera_connected(true);
                 printMessage();
             }
 
             @Override
             public void onDeviceDetach() {
+                globalClass.setCamera_connected(false);
                 printMessage();
             }
         });
@@ -202,6 +226,23 @@ public class MainActivity extends AppCompatActivity {
             }
         });
     }
+
+    //****************************************************************************************************************
+    // azure functions
+    //****************************************************************************************************************
+    // set up azure storage
+    public void setupAzure() {
+        try {
+            StorageCredentialsSharedAccessSignature accountSAS = new StorageCredentialsSharedAccessSignature(globalClass.sasToken);
+            CloudBlobClient blobClient = new CloudBlobClient(globalClass.uriStorage, accountSAS);
+            globalClass.azureContainer = blobClient.getContainerReference("intel-images");
+            Toast.makeText(this, "Azure setup successful", Toast.LENGTH_SHORT).show();
+        } catch (Throwable e) {
+            Log.v("LXT", "other");
+            Toast.makeText(this, "Azure setup failed", Toast.LENGTH_SHORT).show();
+        }
+    }
+
 
     // refresh the page when using the back button
     @Override

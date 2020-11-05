@@ -24,6 +24,7 @@ import com.intel.realsense.librealsense.GLRsSurfaceView;
 import com.intel.realsense.librealsense.Pipeline;
 import com.intel.realsense.librealsense.PipelineProfile;
 import com.intel.realsense.librealsense.RsContext;
+import com.intel.realsense.librealsense.StreamFormat;
 import com.intel.realsense.librealsense.StreamType;
 
 import java.io.File;
@@ -78,6 +79,7 @@ public class VideoActivity extends AppCompatActivity {
         String[] RGB_tokens = RGB_res.split("x");
         RGB_width = Integer.parseInt(RGB_tokens[0]);
         RGB_height = Integer.parseInt(RGB_tokens[1]);
+        Toast.makeText(VideoActivity.this, Integer.toString(RGB_width), Toast.LENGTH_SHORT).show();
 
 
         rootPath = getIntent().getStringExtra("ROOT");
@@ -273,8 +275,8 @@ public class VideoActivity extends AppCompatActivity {
             Log.d(TAG, "try start streaming");
             try(Config cfg = new Config()) {
                 int b = 0;
-                cfg.enableStream(StreamType.DEPTH, depth_width, depth_height);
-                cfg.enableStream(StreamType.COLOR, RGB_width, RGB_height);
+                cfg.enableStream(StreamType.DEPTH, 0, depth_width, depth_height, StreamFormat.Z16, Integer.parseInt(globalClass.getDepth_FPS()));
+                cfg.enableStream(StreamType.COLOR, 0, RGB_width, RGB_height, StreamFormat.RGB8, Integer.parseInt(globalClass.getRGB_FPS()));
                 if (record)
                    i = 1;
                     cfg.enableRecordToFile(getFilePath());

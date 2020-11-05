@@ -22,6 +22,7 @@ import com.intel.realsense.librealsense.GLRsSurfaceView;
 import com.intel.realsense.librealsense.Pipeline;
 import com.intel.realsense.librealsense.PipelineProfile;
 import com.intel.realsense.librealsense.RsContext;
+import com.intel.realsense.librealsense.StreamFormat;
 import com.intel.realsense.librealsense.StreamType;
 
 
@@ -154,8 +155,8 @@ public class StreamActivity extends AppCompatActivity {
     private void configAndStart() throws Exception {
         try(Config config  = new Config())
         {
-            config.enableStream(StreamType.DEPTH, 640, 480);    //enable depth stream
-            config.enableStream(StreamType.COLOR, 640, 480);    //enable color stream
+            config.enableStream(StreamType.DEPTH, 640, 480, StreamFormat.Z16);    //enable depth stream
+            config.enableStream(StreamType.COLOR, 640, 480, StreamFormat.RGB8);    //enable color stream
             // try statement needed here to release resources allocated by the Pipeline:start() method
             try(PipelineProfile pp = mPipeline.start(config)){}
         }

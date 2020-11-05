@@ -29,8 +29,8 @@ fun setupAzure(sasToken: String, uriStorage: StorageUri){
         try {
             val accountSAS = StorageCredentialsSharedAccessSignature(sasToken)
             val blobClient = CloudBlobClient(uriStorage, accountSAS)
-            val azureContainer = blobClient.getContainerReference("intel-images1")
-            azureContainer.createIfNotExists();
+            val azureContainer = blobClient.getContainerReference("intel-images2")
+            azureContainer.createIfNotExists()
         } catch (e: Throwable) {
             Log.v("LXT", "other")
         }

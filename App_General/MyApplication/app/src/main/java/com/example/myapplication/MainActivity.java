@@ -86,7 +86,7 @@ public class MainActivity extends AppCompatActivity {
         // global class
         globalClass = (GlobalClass) getApplicationContext();
         globalClass.setCamera_connected(false);
-        globalClass.sasToken = "?sv=2019-10-10&ss=bfqt&srt=sco&sp=rwdlacup&se=2020-11-05T09:03:47Z&st=2020-11-05T01:03:47Z&spr=https&sig=mQ55wg1xvQ7vzEPe2j1grgyGDOGLpQXmDl9Z9%2FTuzS4%3D";
+        globalClass.sasToken = "?sv=2019-10-10&ss=bfqt&srt=sco&sp=rwdlacup&se=2020-11-06T00:34:20Z&st=2020-11-05T16:34:20Z&spr=https&sig=z%2FukgzxmHuHsQJaruoil0myiLyZT8vVMkbJr%2FFJgYjY%3D";
         globalClass.uriStorage = new StorageUri(URI.create("https://weedsmedia.blob.core.usgovcloudapi.net/"));
         globalClass.azureContainer = null;
 

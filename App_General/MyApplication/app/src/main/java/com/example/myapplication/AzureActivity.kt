@@ -24,6 +24,8 @@ fun uploadImagesToAzure(file: File, azureContainer: CloudBlobContainer){
     }
 }
 
+
+
 fun setupAzure(sasToken: String, uriStorage: StorageUri){
     GlobalScope.doAsync {
         try {

@@ -82,52 +82,48 @@ public class VideoActivity extends AppCompatActivity {
         Toast.makeText(VideoActivity.this, Integer.toString(RGB_width), Toast.LENGTH_SHORT).show();
 
 
-        rootPath = getIntent().getStringExtra("ROOT");
+        rootPath = getIntent().getStringExtra("ROOT");                  // file path for saving in internal storage
 
         mAppContext = getApplicationContext();
-        mBackGroundText = findViewById(R.id.connectCameraText);
-        mGLSurfaceView = findViewById(R.id.glSurfaceView);
+        mBackGroundText = findViewById(R.id.connectCameraText);                 // prompts user to connect a device
+        mGLSurfaceView = findViewById(R.id.glSurfaceView);                      // camera surface view
 
-        mStartRecordFab = findViewById(R.id.startRecordFab);
-        mStopRecordFab = findViewById(R.id.stopRecordFab);
+        mStartRecordFab = findViewById(R.id.startRecordFab);                    // "start recording" floating action button
+        mStopRecordFab = findViewById(R.id.stopRecordFab);                      // "stop recording" floating action button
 
-        mStartRecordFab.setOnClickListener(new View.OnClickListener() {
+        mStartRecordFab.setOnClickListener(new View.OnClickListener() {         // button to start recording
             @Override
             public void onClick(View view) {
-                toggleRecording();
-                clicked = 1;
+                toggleRecording();                      // toggle recording on click
+                clicked = 1;                            // sets "clicked" variable
             }
         });
-        mStopRecordFab.setOnClickListener(new View.OnClickListener() {
+        mStopRecordFab.setOnClickListener(new View.OnClickListener() {          // button to stop recording
             @Override
             public void onClick(View view) {
-                toggleRecording();
-                clicked = 0;
+                toggleRecording();                              // toggle recording
+                clicked = 0;                                    // resets "clicked" variable to zero
             }
         });
 
-        // Android 9 also requires camera permissions
-       /* if (android.os.Build.VERSION.SDK_INT > android.os.Build.VERSION_CODES.O &&
-                ContextCompat.checkSelfPermission(this, Manifest.permission.CAMERA) != PackageManager.PERMISSION_GRANTED) {
-            ActivityCompat.requestPermissions(this, new String[]{Manifest.permission.CAMERA}, PERMISSIONS_REQUEST_CAMERA);
-            return;
-        }*/
+        // check for permission to write to external storage
 
         if (ContextCompat.checkSelfPermission(this, Manifest.permission.WRITE_EXTERNAL_STORAGE) != PackageManager.PERMISSION_GRANTED) {
             ActivityCompat.requestPermissions(this, new String[]{Manifest.permission.WRITE_EXTERNAL_STORAGE}, 0);
             return;
         }
 
-        mPermissionsGranted = true;
+        mPermissionsGranted = true;         // permissions are granted
     }
 
     @Override
     protected void onDestroy() {
         super.onDestroy();
-        mGLSurfaceView.close();
+        mGLSurfaceView.close();             // close surface view
     }
 
     @Override
+    // checks permissions to write files
     public void onRequestPermissionsResult(int requestCode, String permissions[], int[] grantResults) {
         if (ContextCompat.checkSelfPermission(this, Manifest.permission.CAMERA) != PackageManager.PERMISSION_GRANTED) {
             ActivityCompat.requestPermissions(this, new String[]{Manifest.permission.CAMERA}, PERMISSIONS_REQUEST_WRITE);
@@ -139,6 +135,7 @@ public class VideoActivity extends AppCompatActivity {
             return;
         }
 
+
         mPermissionsGranted = true;
     }
 
@@ -146,8 +143,8 @@ public class VideoActivity extends AppCompatActivity {
     protected void onResume() {
         super.onResume();
 
-        if(mPermissionsGranted)
-            init();
+        if(mPermissionsGranted)                 // if permissions are given:
+            init();                             // initialize pipeline
         else
             Log.e(TAG, "missing permissions");
     }
@@ -156,37 +153,39 @@ public class VideoActivity extends AppCompatActivity {
     protected void onPause() {
         super.onPause();
         if(mRsContext != null)
-            mRsContext.close();
-        stop();
+            mRsContext.close();         // close context
+        stop();                         // stop streaming
     }
 
     private String getFilePath(){
-                    // external storage (line 1)
-      //  File folder = new File(Environment.getExternalStorageDirectory().getAbsolutePath() + File.separator + "rs_bags");
+        // line commented out below saves bag files to "rs_bags" folder in external storage instead (used for testing)
+
+        // File folder = new File(Environment.getExternalStorageDirectory().getAbsolutePath() + File.separator + "rs_bags");
+
+
         File folder = new File(rootPath);                       // saves in app internal storage
-        folder.mkdir();
-        SimpleDateFormat sdf = new SimpleDateFormat("yyyyMMdd_HHmmss");
-        String currentDateAndTime = sdf.format(new Date());
-        File file = new File(folder, currentDateAndTime + ".bag");
-        return file.getAbsolutePath();
+        folder.mkdir();                                         // create new file
+        SimpleDateFormat sdf = new SimpleDateFormat("yyyyMMdd_HHmmss");         // date and time info
+        String currentDateAndTime = sdf.format(new Date());                             // save in simple date format
+        File file = new File(folder, currentDateAndTime + ".bag");              // save new .bag file
+        return file.getAbsolutePath();                                          // returns file path
 
     }
 
     void init(){
-        //RsContext.init must be called once in the application lifetime before any interaction with physical RealSense devices.
-        //For multi activities applications use the application context instead of the activity context
-        RsContext.init(mAppContext);
 
-        //Register to notifications regarding RealSense devices attach/detach events via the DeviceListener.
+        RsContext.init(mAppContext);        // get app context
+
+
         mRsContext = new RsContext();
         mRsContext.setDevicesChangedCallback(mListener);
 
-        mPipeline = new Pipeline();
+        mPipeline = new Pipeline();         // establish pipeline
 
         try(DeviceList dl = mRsContext.queryDevices()){
-            if(dl.getDeviceCount() > 0) {
-                showConnectLabel(false);
-                start(false);
+            if(dl.getDeviceCount() > 0) {               // check the device count
+                showConnectLabel(false);         // hide label prompting user to connect device
+                start(false);                   // start streaming but not recording
             }
         }
     }
@@ -195,13 +194,13 @@ public class VideoActivity extends AppCompatActivity {
         runOnUiThread(new Runnable() {
             @Override
             public void run() {
-                mBackGroundText.setVisibility(state ? View.VISIBLE : View.GONE);
-                // mStartRecordFab.show(!state ? View.VISIBLE : View.GONE);
-                if(state){
-                    mStartRecordFab.hide();
+                mBackGroundText.setVisibility(state ? View.VISIBLE : View.GONE);        // show label if device is not connected
+
+                if(state){                                  // if "connect label" is showing:
+                    mStartRecordFab.hide();                 // hide recording button
                 }
                 else {
-                    mStartRecordFab.show();
+                    mStartRecordFab.show();                // show recording button
                 }
                 mStopRecordFab.hide();
 
@@ -211,31 +210,25 @@ public class VideoActivity extends AppCompatActivity {
 
     private void toggleRecording(){
 
-    /*    if(mStartRecordFab.getVisibility() == View.VISIBLE) {
-            start(true);
-        }
-        else {
-            Toast.makeText(VideoActivity.this, "saved", Toast.LENGTH_SHORT).show();
-            stop();
-        }*/
+
         runOnUiThread(new Runnable() {
             @Override
             public void run() {
-
+                // toggles recording
                 if(mStartRecordFab.getVisibility() == View.GONE){
-                    mStartRecordFab.show();
-                    stop();
-                    Toast.makeText(VideoActivity.this, "saved", Toast.LENGTH_SHORT).show();
+                    mStartRecordFab.show();                         // show recording button
+                    stop();                                         // stop recording
+                    Toast.makeText(VideoActivity.this, "saved", Toast.LENGTH_SHORT).show();     // alerts if file's been saved
                 }
                 else {
                     mStartRecordFab.hide();
-                    start(true);
+                    start(true);                            // start recording
                 }
                 if(mStopRecordFab.getVisibility() == View.GONE){
-                    mStopRecordFab.show();
+                    mStopRecordFab.show();                          // show the "stop recording" button
                 }
                 else {
-                    mStopRecordFab.hide();
+                    mStopRecordFab.hide();                          // hide the "stop recording" button
 
                 }
 
@@ -245,14 +238,14 @@ public class VideoActivity extends AppCompatActivity {
 
     private DeviceListener mListener = new DeviceListener() {
         @Override
-        public void onDeviceAttach() {
-            showConnectLabel(false);
+        public void onDeviceAttach() {              // when device is attached
+            showConnectLabel(false);         // camera is connected, message goes away
         }
 
         @Override
-        public void onDeviceDetach() {
-            showConnectLabel(true);
-            stop();
+        public void onDeviceDetach() {              // if device is detached
+            showConnectLabel(true);         // tells user to connect camera
+            stop();                               // stop streaming
         }
     };
 
@@ -260,8 +253,8 @@ public class VideoActivity extends AppCompatActivity {
         @Override
         public void run() {
             try {
-                try(FrameSet frames = mPipeline.waitForFrames()) {
-                    mGLSurfaceView.upload(frames);
+                try(FrameSet frames = mPipeline.waitForFrames()) {          // wait for frames to come in
+                    mGLSurfaceView.upload(frames);                  // render frames to device's screen
                 }
                 mHandler.post(mStreaming);
             }
@@ -278,30 +271,19 @@ public class VideoActivity extends AppCompatActivity {
             mGLSurfaceView.clear();
             Log.d(TAG, "try start streaming");
             try(Config cfg = new Config()) {
-                int b = 0;
+                // enable both depth and RGB stream, set resolution and frame rate
                 cfg.enableStream(StreamType.DEPTH, 0, depth_width, depth_height, StreamFormat.Z16, Integer.parseInt(globalClass.getDepth_FPS()));
                 cfg.enableStream(StreamType.COLOR, 0, RGB_width, RGB_height, StreamFormat.RGB8, Integer.parseInt(globalClass.getRGB_FPS()));
                 if (record)
-                   i = 1;
-                    cfg.enableRecordToFile(getFilePath());
+                    i = 1;
+                cfg.enableRecordToFile(getFilePath());          // enable writing to file
 
-                // try statement needed here to release resources allocated by the Pipeline:start() method
 
-                try(PipelineProfile pp = mPipeline.start(cfg)){
-                    /*while(i==1) {
-                        FileOutputStream fileOutputStream = new FileOutputStream(getFilePath());
-                        fileOutputStream.write(b);
-                        fileOutputStream.flush();
-                        b++;
-                    }*/
+
+                try(PipelineProfile pp = mPipeline.start(cfg)){             // start pipeline
+
                 }
 
-
-               /* int b = 0;
-                while(record){
-                fileOutputStream.write(b);
-                b++;
-                }*/
             }
             mIsStreaming = true;
             mHandler.post(mStreaming);
@@ -314,13 +296,13 @@ public class VideoActivity extends AppCompatActivity {
     private synchronized void stop() {
         if(!mIsStreaming)
             return;
-        try {
+        try {                                           // end streaming
             i = 0;
             Log.d(TAG, "try stop streaming");
             mIsStreaming = false;
             mHandler.removeCallbacks(mStreaming);
-            mPipeline.stop();
-            mGLSurfaceView.clear();
+            mPipeline.stop();                           // close pipeline
+            mGLSurfaceView.clear();                             // clear surface view
             Log.d(TAG, "streaming stopped successfully");
         }  catch (Exception e) {
             Log.d(TAG, "failed to stop streaming");

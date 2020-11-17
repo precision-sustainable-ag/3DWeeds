@@ -160,15 +160,17 @@ public class FilesActivity extends AppCompatActivity {
             @Override
             public void onClick(View v) {
                 final AlertDialog.Builder preDialog = new AlertDialog.Builder(FilesActivity.this);
-                preDialog.setTitle("Preprocess");
-                preDialog.setMessage("Do you really want to Preprocess these files?");
+                preDialog.setTitle("View");
+                preDialog.setMessage("Do you really want to View these files?");
                 preDialog.setPositiveButton("Yes", new DialogInterface.OnClickListener() {
                     @Override
                     public void onClick(DialogInterface dialog, int which) {
                         // preprocess code
-                        updateFilesList();
-                        customAdapter.notifyDataSetChanged();
+
                         bottom_buttons.setVisibility(View.GONE);
+                        Intent playbackIntent = new Intent(getApplicationContext(),
+                                Playback.class);
+                        startActivity(playbackIntent);
                     }
                 });
                 preDialog.setNegativeButton("Cancel", new DialogInterface.OnClickListener() {
